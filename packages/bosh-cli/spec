@@ -1,0 +1,10 @@
+---
+name: bosh-cli
+
+dependencies:
+- libyaml
+- ruby
+
+files:
+- bosh-cli/**/*
+

@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+#
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Load job properties
+source /var/vcap/jobs/task-streaming/data/properties.sh
+
+# Setup env vars and folders for the ctl script
+source /var/vcap/jobs/task-streaming/helpers/setup.sh "task-streaming" "gotty"
+
+# Load function lib (alway before setup, there are some global variables needed)
+source /var/vcap/jobs/task-streaming/helpers/lib.sh
+
+CONFIGFILE="${JOB_DIR}/config/gotty.cfg"
+PIDFILE="${RUN_DIR}/${COMPONENT}.pid"
+
+case ${1:-help} in
+  start)
+    echon_log "Starting gotty ... "
+    pid_guard $PIDFILE $COMPONENT
+    setcap 'cap_net_bind_service=+ep' $(readlink -nf $(which gotty))
+    (
+        {
+            exec chpst -v -u vcap:vcap gotty --config ${CONFIGFILE} ${TASK_GOTTY}
+        } \
+        >>$LOG_DIR/$COMPONENT.stdout.log \
+        2>>$LOG_DIR/$COMPONENT.stderr.log
+    ) &
+    echo $! > $PIDFILE
+    echo "$(<${PIDFILE}). Done"
+    ;;
+  stop)
+    echo_log "Stopping gotty: $(<${PIDFILE}). "
+    kill_and_wait $PIDFILE
+    rm -f $PIDFILE
+    echo_log "Done"
+    ;;
+  *)
+    echo "Usage: $0 {start|stop}"
+    ;;
+esac
+exit 0
+

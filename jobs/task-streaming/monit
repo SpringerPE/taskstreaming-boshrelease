@@ -1,0 +1,15 @@
+check process gotty
+  with pidfile /var/vcap/sys/run/task-streaming/gotty.pid
+  start program "/var/vcap/jobs/task-streaming/bin/gotty_ctl start"
+  stop program "/var/vcap/jobs/task-streaming/bin/gotty_ctl stop"
+  group vcap
+
+<% if p('task_streaming.permit_write') == false || p('task_streaming.permit_write') =~ (/(false|f|no|n|0)$/i) %>
+check process task-watcher
+  with pidfile /var/vcap/sys/run/task-streaming/task-watcher.pid
+  start program "/var/vcap/jobs/task-streaming/bin/task-watcher_ctl start"
+  stop program "/var/vcap/jobs/task-streaming/bin/task-watcher_ctl stop"
+  group vcap
+  depends on gotty
+<% end %>
+

@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+#
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Load job properties
+source /var/vcap/jobs/task-streaming/data/properties.sh
+
+# Setup env vars and folders for the ctl script
+source /var/vcap/jobs/task-streaming/helpers/setup.sh "task-streaming" "task-watcher"
+
+# Load function lib (alway before setup, there are some global variables needed)
+source /var/vcap/jobs/task-streaming/helpers/lib.sh
+
+
+PIDFILE="${RUN_DIR}/${COMPONENT}.pid"
+
+case ${1:-help} in
+  start)
+    echon_log "Starting task-watcher ... "
+    pid_guard $PIDFILE $COMPONENT
+    {
+        # runner daemon in tmux
+        chpst -v -u vcap:vcap ${TASK_WATCHER}
+        sleep $TASK_LOOP_TIME
+        sleep 5
+    } \
+    >>$LOG_DIR/$COMPONENT.stdout.log \
+    2>>$LOG_DIR/$COMPONENT.stderr.log
+    echo "$(<${PIDFILE}). Done"
+    ;;
+  stop)
+    echo_log "Stopping task-watcher: $(<${PIDFILE}). "
+    rm -f "$TASK_FILE_LOCK"
+    sleep $TASK_LOOP_TIME
+    sleep $TASK_LOOP_TIME
+    kill_and_wait "${TASK_FILE_PID}"
+    rm -f "${TASK_FILE_PID}"
+    tmux kill-session -t "${SESSION}"
+    kill_and_wait $PIDFILE
+    rm -f $PIDFILE
+    echo_log "Done"
+    ;;
+  *)
+    echo "Usage: $0 {start|stop}"
+    ;;
+esac
+exit 0

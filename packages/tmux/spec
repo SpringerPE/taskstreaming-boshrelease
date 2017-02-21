@@ -1,0 +1,10 @@
+---
+name: tmux
+
+dependencies: []
+
+files:
+- tmux/libevent-2.0.22-stable.tar.gz    # https://github.com/libevent/libevent/releases/download/release-2.0.22-stable/libevent-2.0.22-stable.tar.gz
+- tmux/ncurses-6.0.tar.gz               # ftp://ftp.gnu.org/gnu/ncurses/ncurses-6.0.tar.gz
+- tmux/tmux-2.3.tar.gz                  # https://github.com/tmux/tmux/releases/download/2.3/tmux-2.3.tar.gz
+

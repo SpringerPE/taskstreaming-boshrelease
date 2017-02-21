@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+# abort script on any command that exits with a non zero value
+set -e -x
+
+# Grab the latest versions that are in the directory
+RUBY_VERSION=$(ls -r ruby/ruby-*.tar.gz | sed 's/.*\/ruby-\(.*\)\.tar\.gz$/\1/' | head -1)
+RUBYGENS_VERSION=$(ls -r ruby/rubygems-*.tar.gz | sed 's/.*\/rubygems-\(.*\)\.tar\.gz$/\1/' | head -1)
+BUNDLER_VERSION=$(ls -r ruby/bundler-*.gem | sed 's/.*\/bundler-\(.*\)\.gem$/\1/' | head -1)
+BOSH_PACKAGES_DIR=${BOSH_PACKAGES_DIR:-/var/vcap/packages}
+
+
+echo "Extracting ruby ${RUBY_VERSION} ... "
+tar xzvf "ruby/ruby-${RUBY_VERSION}.tar.gz"
+
+echo "Setting compiler flags ..."
+CFLAGS="-fPIC"
+for package_include_dir in $(ls -d ${BOSH_PACKAGES_DIR}/*/include 2>/dev/null); do
+    CFLAGS="-I${package_include_dir} ${CFLAGS}"
+done
+export CFLAGS="-I${BOSH_INSTALL_TARGET}/include:${CFLAGS}"
+export CPATH="${BOSH_INSTALL_TARGET}/include:${CPATH}"
+
+echo "Setting libs path ..."
+for package_lib_dir in $(ls -d ${BOSH_PACKAGES_DIR}/*/lib 2>/dev/null); do
+    LIBRARY_PATH="${package_lib_dir}:${LIBRARY_PATH}"
+done
+export LIBRARY_PATH="${BOSH_INSTALL_TARGET}/lib:${LIBRARY_PATH}"
+export LD_LIBRARY_PATH="${LIBRARY_PATH}"
+
+echo "Setting path ..."
+for package_bin_dir in $(ls -d ${BOSH_PACKAGES_DIR}/*/bin 2>/dev/null); do
+    PATH="${package_bin_dir}:${PATH}"
+done
+export PATH="${BOSH_INSTALL_TARGET}/bin:${PATH}"
+
+export LDFLAGS="-Wl,-rpath -Wl,${BOSH_INSTALL_TARGET} ${LDFLAGS}"
+
+echo "Building ruby ... "
+pushd "ruby-${RUBY_VERSION}"
+  ./configure --prefix=${BOSH_INSTALL_TARGET} --disable-install-doc --with-opt-dir=${BOSH_INSTALL_TARGET} --without-gmp
+  make
+  make install
+popd
+
+echo "Extracting rubygems ${RUBYGENS_VERSION} ... "
+tar xzvf "ruby/rubygems-${RUBYGENS_VERSION}.tar.gz"
+
+echo "Building rubygens ... "
+pushd "rubygems-${RUBYGENS_VERSION}"
+  ${BOSH_INSTALL_TARGET}/bin/ruby setup.rb --no-ri --no-rdoc
+popd
+
+echo "Building bundler ${BUNDLER_VERSION} ... "
+${BOSH_INSTALL_TARGET}/bin/gem install "ruby/bundler-${BUNDLER_VERSION}.gem" --local --no-ri --no-rdoc
+

@@ -1,0 +1,66 @@
+---
+name: task-streaming
+
+description: Run gotty streaming the current bosh task
+
+packages:
+- libyaml
+- ruby
+- bosh-cli
+- tmux
+- gotty
+
+templates:
+  bin/gotty_ctl: bin/gotty_ctl
+  bin/task-watcher_ctl: bin/task-watcher_ctl
+  bin/runner.sh: bin/runner.sh
+  bin/task.sh.erb: bin/task.sh
+  config/gotty.cfg.erb: config/gotty.cfg
+  config/task.cfg.erb: config/task.cfg
+  config/index.html.erb: config/index.html
+  data/properties.sh.erb: data/properties.sh
+  helpers/setup.sh: helpers/setup.sh
+  helpers/lib.sh: helpers/lib.sh
+
+properties:
+  task_streaming.name:
+    description: Task name on the browser window.
+    default: "Task streaming"
+  task_streaming.task:
+    description: Task process.
+    default: date
+  task_streaming.task_config:
+    description: Configuration settings for the task. Accesibe via $CONFIG env variable.
+  task_streaming.permit_write:
+    description: Allow stdin from the browser. If false only one instance will be running using tmux, true will spam one task instance per web client.
+    default: false
+  task_streaming.task_ctl_loop:
+    description: "When permit_write false, it controls the task loop: 0, exit when task exits with 0, otherwise loop; 1, exit when task exits with no 0, otherwise loop; 2, keep task in a loop; 3 one shot task."
+    default: 2
+  task_streaming.task_loop_sleep:
+    description: In the task loop, sleep time between loops
+    default: 1
+
+  task_streaming.port:
+    description: Gotty listening port.
+    default: 80
+  task_streaming.address:
+    description: Gotty interface address binding.
+  task_streaming.credentials:
+    description: Gotty basic auth credentials.
+    example: "user:pass"
+  task_streaming.reconnect:
+    description: Gotty client reconnect time, 0 to disable auto reconnection.
+    default: 7
+  task_streaming.background_image:
+    description: Gotty terminal background image url.
+  task_streaming.background_color:
+    description: Gotty terminal background color.
+    default: "rgb(16, 16, 16)"
+  task_streaming.terminal_height:
+    description: Force Gotty height terminal size. Undefined means dynamic size.
+    default: "900px"
+  task_streaming.terminal_width:
+    description: Force Gotty width terminal size. Undefined means dynamic size.
+    default: "1460px"
+
