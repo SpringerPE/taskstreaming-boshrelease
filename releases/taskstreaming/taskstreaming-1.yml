@@ -1,0 +1,43 @@
+---
+packages:
+- name: gotty
+  version: 29c6807f3672a712be7b59bc7f21b21bdad6211b
+  fingerprint: 29c6807f3672a712be7b59bc7f21b21bdad6211b
+  sha1: eb99c714180e6a8a11103b51e447b3a328f5f9e3
+  dependencies: []
+- name: ruby
+  version: 52f732b03bdf8437cc699740b1765845ddcb650d
+  fingerprint: 52f732b03bdf8437cc699740b1765845ddcb650d
+  sha1: c453281a86a1048f0f54ac1e27168986eb7d2de5
+  dependencies:
+  - libyaml
+- name: bosh-cli
+  version: 78157200c06dfd7185769a27baa521a2f0f8db4d
+  fingerprint: 78157200c06dfd7185769a27baa521a2f0f8db4d
+  sha1: 787408ff89d19a42ef9218b65904918f3bc195d9
+  dependencies:
+  - libyaml
+  - ruby
+- name: libyaml
+  version: 46e7275caf8567fedf7cb0c1879f19afae800b82
+  fingerprint: 46e7275caf8567fedf7cb0c1879f19afae800b82
+  sha1: 2d5d3b70dcfa294707acd4293f5e5c72eb7c03f5
+  dependencies: []
+- name: tmux
+  version: f0eb9c2cc171cc89624dbd743481c5f10efac464
+  fingerprint: f0eb9c2cc171cc89624dbd743481c5f10efac464
+  sha1: 53c1c86ad236b38165572cf41e75c29d2fc35388
+  dependencies: []
+jobs:
+- name: task-streaming
+  version: 93f79c79b79c9c1b6ee2c8110b6d7cfa938e06a0
+  fingerprint: 93f79c79b79c9c1b6ee2c8110b6d7cfa938e06a0
+  sha1: aa230b8b668ce6e1b112715f525b8861e3a89a34
+license:
+  version: dd2876e08d0816dd876506d44442c2e814724a1d
+  fingerprint: dd2876e08d0816dd876506d44442c2e814724a1d
+  sha1: 414ea2b4c6ccc9a9239b583238a51c03b3aa3807
+commit_hash: 9822818e
+uncommitted_changes: true
+name: taskstreaming
+version: '1'

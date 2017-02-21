@@ -1,0 +1,33 @@
+---
+gotty/gotty_linux_amd64.tar.gz:
+  object_id: 186cb51a-1763-49e2-89e2-061dab5405d5
+  sha: 3154e227ede84a04aacf4b392e008f9d1643bd19
+  size: 3055880
+ruby/bundler-1.11.2.gem:
+  object_id: 604d222c-210c-40ae-9b6c-3653f9e1cac2
+  sha: 14cda642bbe3499a892d1d4d1576f6670b1c9a7b
+  size: 317952
+ruby/ruby-2.3.3.tar.gz:
+  object_id: bb1ae46a-306c-483c-a9f1-d8b43dbea644
+  sha: 1014ee699071aa2ddd501907d18cbe15399c997d
+  size: 17813577
+ruby/rubygems-2.6.10.tar.gz:
+  object_id: e0c84a0c-1bbe-49ea-8c67-e1174d6fd825
+  sha: 65814f7f7ec2741c47a3f6cc7956491f89e5ee92
+  size: 765890
+libyaml/yaml-0.1.7.tar.gz:
+  object_id: 64560f5d-49a5-4ee8-94e1-cb4c1de4dddf
+  sha: 3590cbf092ef4c71bc0a9b404c00a626b1e04dee
+  size: 527518
+tmux/libevent-2.0.22-stable.tar.gz:
+  object_id: e9c11e88-6580-42eb-9e3d-ea0aafeca255
+  sha: a586882bc93a208318c70fc7077ed8fca9862864
+  size: 854987
+tmux/tmux-2.3.tar.gz:
+  object_id: 52b3316d-c6a4-4229-9c7c-dba0f485fc6e
+  sha: 78c856f6543e02e018730f526687a8444c2d8ab3
+  size: 473944
+tmux/ncurses-6.0.tar.gz:
+  object_id: e99a03c5-9678-46d4-a6a5-b952e9d815bd
+  sha: acd606135a5124905da770803c05f1f20dd3b21c
+  size: 3131891
